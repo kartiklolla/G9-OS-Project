@@ -148,6 +148,7 @@ UPROGS=\
 	$U/_readcount\
 	$U/_procinfo\
 	$U/_priority\
+	$U/_waitstat\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

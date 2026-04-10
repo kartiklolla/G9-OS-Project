@@ -24,3 +24,4 @@
 #define SYS_getprocinfo  23
 #define SYS_setpriority  24
 #define SYS_getpriority  25
+#define SYS_wait_stat    26

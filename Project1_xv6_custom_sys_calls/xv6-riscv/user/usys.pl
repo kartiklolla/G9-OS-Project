@@ -46,3 +46,4 @@ entry("getreadcount");
 entry("getprocinfo");
 entry("setpriority");
 entry("getpriority");
+entry("wait_stat");

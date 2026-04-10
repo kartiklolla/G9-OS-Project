@@ -113,6 +113,16 @@ sys_getpriority(void)
 }
 
 uint64
+sys_wait_stat(void)
+{
+  uint64 wtime, rtime, status;
+  argaddr(0, &wtime);
+  argaddr(1, &rtime);
+  argaddr(2, &status);
+  return kwait_stat(wtime, rtime, status);
+}
+
+uint64
 sys_getprocinfo(void)
 {
   int pid;

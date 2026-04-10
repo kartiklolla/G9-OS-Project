@@ -105,4 +105,7 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   int priority;                // Scheduling priority: 1 (highest) to 20 (lowest), default 10
+  uint ctime;                  // Creation time (ticks at allocproc)
+  uint rtime;                  // Ticks spent in RUNNING state
+  uint stime;                  // Ticks spent in RUNNABLE state (waiting to be scheduled)
 };

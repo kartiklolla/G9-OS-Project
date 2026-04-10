@@ -169,6 +169,7 @@ clockintr()
     ticks++;
     wakeup(&ticks);
     release(&tickslock);
+    update_time_stats();  // bump rtime/stime for every live process
   }
 
   // ask for the next timer interrupt. this also clears

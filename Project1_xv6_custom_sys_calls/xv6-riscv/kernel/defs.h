@@ -85,6 +85,8 @@ int             getreadcount(void);
 int             getprocinfo(int, uint64);
 int             setpriority(int, int);
 int             getpriority(int);
+void            update_time_stats(void);
+int             kwait_stat(uint64, uint64, uint64);
 int             kfork(void);
 int             growproc(int);
 void            proc_mapstacks(pagetable_t);

@@ -131,6 +131,9 @@ found:
   p->pid = allocpid();
   p->state = USED;
   p->priority = 10;  // default priority (range 1-20, lower = higher priority)
+  p->ctime = ticks;
+  p->rtime = 0;
+  p->stime = 0;
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -722,6 +725,87 @@ getreadcount(void)
   n = readcount;
   release(&readcount_lock);
   return n;
+}
+
+// Called once per timer tick (from clockintr, CPU 0 only).
+// Increments rtime for RUNNING processes and stime for RUNNABLE processes.
+void
+update_time_stats(void)
+{
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if(p->state == RUNNING)
+      p->rtime++;
+    else if(p->state == RUNNABLE)
+      p->stime++;
+    release(&p->lock);
+  }
+}
+
+// Extended wait(): like kwait() but also returns the child's running
+// ticks (*rtime), waiting ticks (*wtime), and exit status (*status).
+// All three user pointers may be 0 (ignored).
+// Returns child pid on success, -1 on error.
+int
+kwait_stat(uint64 wtime_addr, uint64 rtime_addr, uint64 status_addr)
+{
+  struct proc *pp;
+  int havekids, pid;
+  struct proc *p = myproc();
+
+  acquire(&wait_lock);
+
+  for(;;){
+    havekids = 0;
+    for(pp = proc; pp < &proc[NPROC]; pp++){
+      if(pp->parent != p)
+        continue;
+
+      acquire(&pp->lock);
+      havekids = 1;
+
+      if(pp->state == ZOMBIE){
+        pid = pp->pid;
+
+        // Copy stats out before freeproc wipes the struct.
+        if(wtime_addr != 0 &&
+           copyout(p->pagetable, wtime_addr,
+                   (char*)&pp->stime, sizeof(pp->stime)) < 0){
+          release(&pp->lock);
+          release(&wait_lock);
+          return -1;
+        }
+        if(rtime_addr != 0 &&
+           copyout(p->pagetable, rtime_addr,
+                   (char*)&pp->rtime, sizeof(pp->rtime)) < 0){
+          release(&pp->lock);
+          release(&wait_lock);
+          return -1;
+        }
+        if(status_addr != 0 &&
+           copyout(p->pagetable, status_addr,
+                   (char*)&pp->xstate, sizeof(pp->xstate)) < 0){
+          release(&pp->lock);
+          release(&wait_lock);
+          return -1;
+        }
+
+        freeproc(pp);
+        release(&pp->lock);
+        release(&wait_lock);
+        return pid;
+      }
+      release(&pp->lock);
+    }
+
+    if(!havekids || killed(p)){
+      release(&wait_lock);
+      return -1;
+    }
+
+    sleep(p, &wait_lock);
+  }
 }
 
 // Set the priority of process pid. Valid range: 1-20 (lower = higher priority).
