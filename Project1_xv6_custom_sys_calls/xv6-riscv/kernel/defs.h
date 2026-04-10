@@ -82,6 +82,7 @@ int             cpuid(void);
 void            kexit(int);
 void            increment_readcount(void);
 int             getreadcount(void);
+int             getprocinfo(int, uint64);
 int             kfork(void);
 int             growproc(int);
 void            proc_mapstacks(pagetable_t);
