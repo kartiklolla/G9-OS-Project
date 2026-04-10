@@ -27,6 +27,8 @@ int uptime(void);
 int getreadcount(void);
 struct procinfo;
 int getprocinfo(int, struct procinfo*);
+int setpriority(int, int);
+int getpriority(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

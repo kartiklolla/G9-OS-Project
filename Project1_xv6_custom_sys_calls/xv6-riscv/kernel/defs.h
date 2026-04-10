@@ -83,6 +83,8 @@ void            kexit(int);
 void            increment_readcount(void);
 int             getreadcount(void);
 int             getprocinfo(int, uint64);
+int             setpriority(int, int);
+int             getpriority(int);
 int             kfork(void);
 int             growproc(int);
 void            proc_mapstacks(pagetable_t);

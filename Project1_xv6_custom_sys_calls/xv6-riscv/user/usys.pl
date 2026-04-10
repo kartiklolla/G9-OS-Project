@@ -44,3 +44,5 @@ entry("pause");
 entry("uptime");
 entry("getreadcount");
 entry("getprocinfo");
+entry("setpriority");
+entry("getpriority");

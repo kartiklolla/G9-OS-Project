@@ -96,6 +96,23 @@ sys_kill(void)
 }
 
 uint64
+sys_setpriority(void)
+{
+  int pid, priority;
+  argint(0, &pid);
+  argint(1, &priority);
+  return setpriority(pid, priority);
+}
+
+uint64
+sys_getpriority(void)
+{
+  int pid;
+  argint(0, &pid);
+  return getpriority(pid);
+}
+
+uint64
 sys_getprocinfo(void)
 {
   int pid;
