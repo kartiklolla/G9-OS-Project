@@ -1,3 +1,5 @@
+#include "shm.h"
+
 // Saved registers for kernel context switches.
 struct context {
   uint64 ra;
@@ -108,4 +110,5 @@ struct proc {
   uint ctime;                  // Creation time (ticks at allocproc)
   uint rtime;                  // Ticks spent in RUNNING state
   uint stime;                  // Ticks spent in RUNNABLE state (waiting to be scheduled)
+  struct shmattach shm[8];     // per-process shared-memory attachment table
 };

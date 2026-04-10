@@ -47,3 +47,5 @@ entry("getprocinfo");
 entry("setpriority");
 entry("getpriority");
 entry("wait_stat");
+entry("shm_open");
+entry("shm_close");

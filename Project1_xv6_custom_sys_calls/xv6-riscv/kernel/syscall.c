@@ -106,6 +106,8 @@ extern uint64 sys_getprocinfo(void);
 extern uint64 sys_setpriority(void);
 extern uint64 sys_getpriority(void);
 extern uint64 sys_wait_stat(void);
+extern uint64 sys_shm_open(void);
+extern uint64 sys_shm_close(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -136,6 +138,8 @@ static uint64 (*syscalls[])(void) = {
 [SYS_setpriority]  sys_setpriority,
 [SYS_getpriority]  sys_getpriority,
 [SYS_wait_stat]    sys_wait_stat,
+[SYS_shm_open]     sys_shm_open,
+[SYS_shm_close]    sys_shm_close,
 };
 
 void

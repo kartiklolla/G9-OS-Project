@@ -113,6 +113,23 @@ sys_getpriority(void)
 }
 
 uint64
+sys_shm_open(void)
+{
+  int key, size;
+  argint(0, &key);
+  argint(1, &size);
+  return shm_open(key, size);
+}
+
+uint64
+sys_shm_close(void)
+{
+  int key;
+  argint(0, &key);
+  return shm_close(key);
+}
+
+uint64
 sys_wait_stat(void)
 {
   uint64 wtime, rtime, status;

@@ -87,6 +87,11 @@ int             setpriority(int, int);
 int             getpriority(int);
 void            update_time_stats(void);
 int             kwait_stat(uint64, uint64, uint64);
+
+// shm.c
+void            shminit(void);
+uint64          shm_open(int, int);
+int             shm_close(int);
 int             kfork(void);
 int             growproc(int);
 void            proc_mapstacks(pagetable_t);

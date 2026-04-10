@@ -13,6 +13,7 @@ OBJS = \
   $K/main.o \
   $K/vm.o \
   $K/proc.o \
+  $K/shm.o \
   $K/swtch.o \
   $K/trampoline.o \
   $K/trap.o \
@@ -149,6 +150,7 @@ UPROGS=\
 	$U/_procinfo\
 	$U/_priority\
 	$U/_waitstat\
+	$U/_shmtest\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

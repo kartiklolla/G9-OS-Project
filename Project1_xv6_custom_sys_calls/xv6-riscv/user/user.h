@@ -30,6 +30,8 @@ int getprocinfo(int, struct procinfo*);
 int setpriority(int, int);
 int getpriority(int);
 int wait_stat(int*, int*, int*);
+uint64 shm_open(int, int);
+int shm_close(int);
 
 // ulib.c
 int stat(const char*, struct stat*);
