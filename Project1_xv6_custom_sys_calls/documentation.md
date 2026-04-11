@@ -40,7 +40,8 @@ $ readcount
 Creates a pipe, writes 3 bytes, does 3 `read()` calls, asserts counter delta ≥ 3.
 
 ### Execution Screenshot
-_[paste screenshot here]_
+<img width="298" height="130" alt="readcount" src="https://github.com/user-attachments/assets/f64812b3-789f-4f82-89dc-1d5e47b08dea" />
+
 
 ---
 
@@ -66,7 +67,8 @@ $ procinfo
 Queries self, a bogus PID (expects -1), and a forked child.
 
 ### Execution Screenshot
-_[paste screenshot here]_
+<img width="799" height="132" alt="procinfo" src="https://github.com/user-attachments/assets/8c3e6675-b0c3-4092-93ba-26d0526c525d" />
+
 
 ---
 
@@ -99,7 +101,8 @@ make CPUS=1 qemu   # then run priority — clearest scheduler result
 Tests default, set/get, out-of-range rejection, bogus PID, and scheduler ordering.
 
 ### Execution Screenshot
-_[paste screenshot here]_
+<img width="700" height="211" alt="priority" src="https://github.com/user-attachments/assets/fbd93afc-82f5-4a2e-b473-540c43e835e1" />
+
 
 ---
 
@@ -130,7 +133,8 @@ $ waitstat
 Forks a spin-loop child (exit 42), calls `wait_stat`, prints rtime/wtime/status.
 
 ### Execution Screenshot
-_[paste screenshot here]_
+<img width="358" height="147" alt="waitstat" src="https://github.com/user-attachments/assets/48261aa2-7948-4419-8408-2edb3851e3e9" />
+
 
 ---
 
@@ -187,7 +191,8 @@ $ shmtest
 Parent writes `0xdeadbeef` into page, child maps same key and reads it back. Also tests double-open and unknown-key close.
 
 ### Execution Screenshot
-_[paste screenshot here]_
+<img width="513" height="169" alt="shmtest" src="https://github.com/user-attachments/assets/aa0f120e-27ad-43fe-9da9-7ce5fe9b2561" />
+
 
 ---
 
