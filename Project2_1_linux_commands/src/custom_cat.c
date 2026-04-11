@@ -1,4 +1,6 @@
 // custom_cat.c
+// Name: Kandlavath Mohan Naik
+// Roll No: 24JE0631
 // My implementation of the cat command for Project 2
 // What it does: reads files and prints them to the screen
 // If no file is given, it reads whatever you type (stdin)
@@ -16,36 +18,36 @@
 #include "common.h"
 
 int show_line_numbers = 0;  // -n flag
-int number_nonempty = 0;    // -b flag
-int show_dollar = 0;        // -E flag
-int squeeze = 0;            // -s flag
-int lineno = 1;             // line counter across files
+int skip_empty = 0;         // -b flag
+int end_marker = 0;         // -E flag
+int skip_blanks = 0;        // -s flag
+int my_line_cnt = 1;        // line counter across files
 
-// read char by char so we can handle flags properly
+// fgetc reads one char at a time so i can apply flags on each line
 void print_file(FILE *fp, const char *filename) {
     int ch;
-    int at_line_start = 1;
-    int blank_count = 0;
+    int new_line = 1;
+    int empty_lines = 0;
 
     while ((ch = fgetc(fp)) != EOF) {
         if (ch == '\n') {
-            if (at_line_start == 1) {
-                blank_count++;
-                if (squeeze && blank_count > 1) continue; // skip extra blank lines
-                if (show_line_numbers && !number_nonempty)
-                    printf("%6d\t", lineno++); // number blank lines too for -n
+            if (new_line == 1) {
+                empty_lines++;
+                if (skip_blanks && empty_lines > 1) continue; // -s: skip extra blank lines
+                if (show_line_numbers && !skip_empty)
+                    printf("%6d\t", my_line_cnt++); // -n: number blank lines too
             } else {
-                blank_count = 0;
+                empty_lines = 0;
             }
-            if (show_dollar) putchar('$'); // print $ before newline for -E
+            if (end_marker) putchar('$'); // -E: print $ before newline
             putchar('\n');
-            at_line_start = 1;
+            new_line = 1;
         } else {
-            blank_count = 0;
-            if (at_line_start) {
-                if (number_nonempty || show_line_numbers)
-                    printf("%6d\t", lineno++); // print line number
-                at_line_start = 0;
+            empty_lines = 0;
+            if (new_line) {
+                if (skip_empty || show_line_numbers)
+                    printf("%6d\t", my_line_cnt++); // print line number
+                new_line = 0;
             }
             putchar(ch);
         }
@@ -55,11 +57,14 @@ void print_file(FILE *fp, const char *filename) {
 }
 
 void show_usage() {
+    printf("=== custom_cat by Mohan ===\n");
     printf("Usage: custom_cat [OPTIONS] [FILE...]\n");
     printf("  -n   number all lines\n");
     printf("  -b   number non-empty lines only\n");
     printf("  -E   show $ at end of each line\n");
     printf("  -s   squeeze multiple blank lines\n");
+    printf("  -h   show this help\n");
+    printf("If no file given, reads from stdin\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -73,16 +78,16 @@ int main(int argc, char *argv[]) {
         for (j = 1; argv[i][j] != '\0'; j++) {
             char c = argv[i][j];
             if (c == 'n') show_line_numbers = 1;
-            else if (c == 'b') number_nonempty = 1;
-            else if (c == 'E') show_dollar = 1;
-            else if (c == 's') squeeze = 1;
+            else if (c == 'b') skip_empty = 1;
+            else if (c == 'E') end_marker = 1;
+            else if (c == 's') skip_blanks = 1;
             else if (c == 'h') { show_usage(); return 0; }
             else { fprintf(stderr, "unknown option -%c\n", c); return 1; }
         }
         file_start++;
     }
 
-    if (number_nonempty) show_line_numbers = 0; // -b overrides -n
+    if (skip_empty) show_line_numbers = 0; // -b overrides -n
 
     // no file given, read from stdin
     if (file_start >= argc) { print_file(stdin, "stdin"); return 0; }
@@ -99,5 +104,8 @@ int main(int argc, char *argv[]) {
         print_file(fp, argv[i]);
         fclose(fp);
     }
+
+    // print total lines at the end
+    fprintf(stderr, "total lines processed: %d\n", my_line_cnt - 1);
     return exit_status;
 }
