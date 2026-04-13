@@ -49,3 +49,6 @@ entry("getpriority");
 entry("wait_stat");
 entry("shm_open");
 entry("shm_close");
+entry("mutex_init");
+entry("mutex_lock");
+entry("mutex_unlock");

@@ -167,3 +167,98 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// =====================================================
+// MUTEX LOCK SYSCALLS
+// Written by K-Mohan26
+// =====================================================
+// Before writing this we looked at kernel/spinlock.c
+// The existing lock there works like this:
+//   while(locked != 0)
+//      ;   <-- just sits here doing nothing, wasting CPU
+// And it cant be called from user programs at all.
+// Our version calls yield() instead of wasting CPU
+// and user programs can call it using a simple ID number.
+// =====================================================
+
+#include "mutex.h"
+
+// this is the actual table that stores all our mutexes in kernel memory
+struct umutex mutextable[MAX_MUTEXES];
+
+// mutexinit - runs once when xv6 boots up
+// just sets everything to zero so the table starts clean
+void
+mutexinit(void)
+{
+  for(int i = 0; i < MAX_MUTEXES; i++){
+    mutextable[i].valid     = 0;
+    mutextable[i].locked    = 0;
+    mutextable[i].owner_pid = 0;
+  }
+}
+
+// sys_mutex_init - user calls mutex_init() to get a new lock
+// we scan the table for a free slot and return its index
+// that index is the "ID" the user will use from now on
+uint64
+sys_mutex_init(void)
+{
+  for(int i = 0; i < MAX_MUTEXES; i++){
+    if(mutextable[i].valid == 0){
+      mutextable[i].valid     = 1;
+      mutextable[i].locked    = 0;
+      mutextable[i].owner_pid = 0;
+      return i;    // give the user this slot number
+    }
+  }
+  return -1;   // all 16 slots are taken
+}
+
+// sys_mutex_lock - user calls mutex_lock(id) to take the lock
+// if someone else already has it we wait by calling yield()
+// yield() tells the CPU "go run something else for now"
+// this is better than the existing spinlock which just burns CPU
+uint64
+sys_mutex_lock(void)
+{
+  int id;
+  argint(0, &id);   // read the id argument the user passed in
+
+  // basic checks - make sure the id makes sense
+  if(id < 0 || id >= MAX_MUTEXES) return -1;
+  if(mutextable[id].valid == 0)   return -1;
+
+  struct umutex *m = &mutextable[id];
+
+  // keep trying until we get the lock
+  // __sync_lock_test_and_set sets locked=1 and returns old value
+  // if old value was already 1 someone else had it so we wait
+  while(__sync_lock_test_and_set(&m->locked, 1) != 0){
+    yield();   // give up CPU while waiting, check again later
+  }
+
+  // we got the lock - remember who owns it
+  m->owner_pid = myproc()->pid;
+  return 0;
+}
+
+// sys_mutex_unlock - user calls mutex_unlock(id) to release the lock
+// we check that only the process that locked it can unlock it
+// then we clear the lock so someone else can take it
+uint64
+sys_mutex_unlock(void)
+{
+  int id;
+  argint(0, &id);   // read the id argument
+
+  if(id < 0 || id >= MAX_MUTEXES) return -1;
+  if(mutextable[id].valid == 0)   return -1;
+
+  // safety - only the owner can unlock
+  if(mutextable[id].owner_pid != myproc()->pid) return -1;
+
+  mutextable[id].owner_pid = 0;
+  __sync_lock_release(&mutextable[id].locked);  // atomically clear the lock
+  return 0;
+}

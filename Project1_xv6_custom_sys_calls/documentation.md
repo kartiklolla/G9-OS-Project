@@ -209,3 +209,50 @@ Parent writes `0xdeadbeef` into page, child maps same key and reads it back. Als
 | 7 | `user/usys.pl` | `entry("name");` |
 | 8 | `user/<test>.c` | Test program |
 | 9 | `Makefile` | `$U/_<test>` in `UPROGS` |
+
+---
+
+## Syscall 6 — mutex_init / mutex_lock / mutex_unlock
+**Implemented by: K-Mohan26**
+
+### Purpose
+xv6 already has spinlocks inside the kernel but normal user programs cannot use them at all. so i added 3 new system calls so that user processes can also create and use mutex locks for synchronization. this is useful when two processes share data and we dont want both accessing it at same time.
+
+### System Calls
+- `mutex_init(int id)` — initializes a mutex at slot id (0 to 15). returns 0 on success, -1 if id is out of range
+- `mutex_lock(int id)` — tries to acquire the lock. if already held by another process, current process blocks (sleeps) until it is released
+- `mutex_unlock(int id)` — releases the lock and wakes up any process that was waiting for it. only the owner process can unlock
+
+### How it works
+i added a global array `mutextable[16]` of `struct umutex` in kernel/sysproc.c. each entry has 3 fields — valid (is slot in use), locked (is lock taken), owner_pid (which process holds it). mutexinit() is called at boot to zero everything out. mutex_lock uses `__sync_lock_test_and_set` for atomic locking so there are no race conditions even on multi cpu systems. mutex_unlock uses `__sync_lock_release` to atomically clear the lock and then wakes up waiting processes.
+
+### Files Modified
+| File | Change |
+|------|--------|
+| kernel/mutex.h | new file — defines struct umutex and MAX_MUTEXES |
+| kernel/sysproc.c | added mutexinit, sys_mutex_init, sys_mutex_lock, sys_mutex_unlock |
+| kernel/syscall.h | added SYS_mutex_init=29, SYS_mutex_lock=30, SYS_mutex_unlock=31 |
+| kernel/syscall.c | registered the 3 new syscalls in dispatch table |
+| kernel/defs.h | added function declarations |
+| kernel/main.c | added mutexinit() call at boot |
+| user/user.h | added user-space prototypes |
+| user/usys.pl | added syscall stubs |
+| user/mutextest.c | new file — test program |
+
+### Test Program
+$ mutextest
+
+### Execution Screenshot
+Execution Screenshot
+
+![mutextest output](Screenshot%202026-04-13%20154603.png)
+=== mutex test ===
+mutex_init(0): OK
+mutex_lock(0): OK (acquired)
+mutex_unlock(0): OK (released)
+Parent (pid=3) holds mutex.
+Child (pid=4) waiting for mutex...
+Parent releasing mutex.
+Child acquired mutex!
+Child released mutex.
+=== mutex test PASSED ===
