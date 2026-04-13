@@ -17,6 +17,7 @@ make CPUS=1 qemu   # single-CPU (clearer priority demo)
 ---
 
 ## Syscall 1 — `getreadcount`
+**Implemented by - Kartik Lolla**
 
 ### Purpose
 Returns the total number of `read()` system calls made system-wide since boot. Useful for profiling or auditing I/O activity.
@@ -46,6 +47,7 @@ Creates a pipe, writes 3 bytes, does 3 `read()` calls, asserts counter delta ≥
 ---
 
 ## Syscall 2 — `getprocinfo`
+**Implemented by - Kartik Lolla**
 
 ### Purpose
 Allows any process to inspect the state of any other live process by PID — its parent PID, scheduler state, memory size, and name. Analogous to a simplified `/proc/<pid>/status`.
@@ -73,6 +75,7 @@ Queries self, a bogus PID (expects -1), and a forked child.
 ---
 
 ## Syscall 3 — `setpriority` / `getpriority`
+**Implemented by - Kartik Lolla**
 
 ### Purpose
 Gives processes a numeric priority that the scheduler respects. Lower priority number = higher urgency. Default 10, range 1–20.
@@ -107,6 +110,8 @@ Tests default, set/get, out-of-range rejection, bogus PID, and scheduler orderin
 ---
 
 ## Syscall 4 — `wait_stat`
+**Implemented by - Kartik Lolla**
+
 
 ### Purpose
 Extended `wait()` that surfaces timing data about a child process: how long it waited in the RUNNABLE queue and how long it actually ran on CPU.
@@ -139,6 +144,7 @@ Forks a spin-loop child (exit 42), calls `wait_stat`, prints rtime/wtime/status.
 ---
 
 ## Syscall 5 — `shm_open` / `shm_close`
+**Implemented by - Kartik Lolla**
 
 ### Purpose
 Shared-memory IPC: lets two or more processes map the same physical pages into their address spaces and communicate through them directly, without copying through the kernel.
@@ -193,23 +199,6 @@ Parent writes `0xdeadbeef` into page, child maps same key and reads it back. Als
 ### Execution Screenshot
 <img width="513" height="169" alt="shmtest" src="https://github.com/user-attachments/assets/aa0f120e-27ad-43fe-9da9-7ce5fe9b2561" />
 
-
----
-
-## xv6 Syscall Pipeline (applied to every syscall)
-
-| Step | File | What to add |
-|------|------|-------------|
-| 1 | `kernel/syscall.h` | `#define SYS_name <N>` |
-| 2 | `kernel/syscall.c` | `extern uint64 sys_name(void);` + `[SYS_name] sys_name,` |
-| 3 | `kernel/sysproc.c` | `sys_name()` wrapper using `argint`/`argaddr` |
-| 4 | `kernel/defs.h` | Declaration of the real implementation |
-| 5 | `kernel/proc.c` (or new file) | Real implementation |
-| 6 | `user/user.h` | User-space prototype |
-| 7 | `user/usys.pl` | `entry("name");` |
-| 8 | `user/<test>.c` | Test program |
-| 9 | `Makefile` | `$U/_<test>` in `UPROGS` |
-
 ---
 
 ## Syscall 6 — mutex_init / mutex_lock / mutex_unlock
@@ -245,14 +234,23 @@ $ mutextest
 ### Execution Screenshot
 Execution Screenshot
 
-![mutextest output](Screenshot%202026-04-13%20154603.png)
-=== mutex test ===
-mutex_init(0): OK
-mutex_lock(0): OK (acquired)
-mutex_unlock(0): OK (released)
-Parent (pid=3) holds mutex.
-Child (pid=4) waiting for mutex...
-Parent releasing mutex.
-Child acquired mutex!
-Child released mutex.
-=== mutex test PASSED ===
+![mutextest output](./screenshots/Screenshot%202026-04-13%20154603.png)
+
+---
+
+## xv6 Syscall Pipeline (applied to every syscall)
+
+| Step | File | What to add |
+|------|------|-------------|
+| 1 | `kernel/syscall.h` | `#define SYS_name <N>` |
+| 2 | `kernel/syscall.c` | `extern uint64 sys_name(void);` + `[SYS_name] sys_name,` |
+| 3 | `kernel/sysproc.c` | `sys_name()` wrapper using `argint`/`argaddr` |
+| 4 | `kernel/defs.h` | Declaration of the real implementation |
+| 5 | `kernel/proc.c` (or new file) | Real implementation |
+| 6 | `user/user.h` | User-space prototype |
+| 7 | `user/usys.pl` | `entry("name");` |
+| 8 | `user/<test>.c` | Test program |
+| 9 | `Makefile` | `$U/_<test>` in `UPROGS` |
+
+---
+

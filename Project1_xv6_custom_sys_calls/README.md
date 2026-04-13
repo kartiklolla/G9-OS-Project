@@ -129,6 +129,22 @@ Parent writes `0xdeadbeef` into a shared page, child maps the same key and reads
 
 ---
 
+## Syscall 6 — mutex_init / mutex_lock / mutex_unlock
+
+Three system calls for user-space mutex locks (synchronization).
+
+- `mutex_init(id)` — initializes a mutex slot (valid id: 0 to 15)
+- `mutex_lock(id)` — acquires the lock, blocks if already held by another process
+- `mutex_unlock(id)` — releases the lock and wakes up any waiting process
+
+**Test:**
+```
+$ mutextest
+```
+**Files modified:** kernel/mutex.h, kernel/sysproc.c, kernel/syscall.h, kernel/syscall.c, kernel/defs.h, kernel/main.c, user/user.h, user/usys.pl, user/mutextest.c
+
+---
+
 ## File Map
 
 | Kernel file | Purpose |
@@ -155,16 +171,3 @@ Parent writes `0xdeadbeef` into a shared page, child maps the same key and reads
 | `user/waitstat.c` | Test for `wait_stat` |
 | `user/shmtest.c` | Test for `shm_open`/`shm_close` |
 
-## Syscall 6 — mutex_init / mutex_lock / mutex_unlock
-**Implemented by: K-Mohan26**
-
-Three system calls for user-space mutex locks (synchronization).
-
-- `mutex_init(id)` — initializes a mutex slot (valid id: 0 to 15)
-- `mutex_lock(id)` — acquires the lock, blocks if already held by another process
-- `mutex_unlock(id)` — releases the lock and wakes up any waiting process
-
-**Test:**
-$ mutextest
-
-**Files modified:** kernel/mutex.h, kernel/sysproc.c, kernel/syscall.h, kernel/syscall.c, kernel/defs.h, kernel/main.c, user/user.h, user/usys.pl, user/mutextest.c
