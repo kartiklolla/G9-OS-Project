@@ -272,9 +272,36 @@ print_prompt(void)
         fprintf(stderr, "$ ");
 }
 
+/* Prepend the directory containing this binary to PATH so that the
+   other custom_* commands (custom_ls, custom_cat, …) are found by
+   execvp without the user having to set PATH manually. */
+static void
+prepend_bin_dir_to_path(void)
+{
+    char self[4096];
+    ssize_t len = readlink("/proc/self/exe", self, sizeof(self) - 1);
+    if (len < 0) return;
+    self[len] = '\0';
+
+    /* Isolate the directory part. */
+    char *slash = strrchr(self, '/');
+    if (!slash) return;
+    *slash = '\0';  /* self is now the directory path */
+
+    const char *old_path = getenv("PATH");
+    char new_path[8192];
+    if (old_path)
+        snprintf(new_path, sizeof(new_path), "%s:%s", self, old_path);
+    else
+        snprintf(new_path, sizeof(new_path), "%s", self);
+    setenv("PATH", new_path, 1);
+}
+
 int
 main(void)
 {
+    prepend_bin_dir_to_path();
+
     char line[MAX_LINE];
     int  last_status = 0;
     int  interactive = isatty(STDIN_FILENO);
