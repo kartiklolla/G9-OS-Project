@@ -112,7 +112,6 @@ Tests default, set/get, out-of-range rejection, bogus PID, and scheduler orderin
 ## Syscall 4 — `wait_stat`
 **Implemented by - Kartik Lolla**
 
-
 ### Purpose
 Extended `wait()` that surfaces timing data about a child process: how long it waited in the RUNNABLE queue and how long it actually ran on CPU.
 

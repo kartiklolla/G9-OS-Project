@@ -159,7 +159,8 @@ $ mutextest
 | `kernel/shm.h` | `struct shmregion`, `struct shmattach` |
 | `kernel/shm.c` | `shminit`, `shm_open`, `shm_close` |
 | `kernel/procinfo.h` | `struct procinfo` (shared with user space) |
-| `kernel/main.c` | Calls `shminit()` at boot |
+| `kernel/mutex.h` | `struct umutex`, `MAX_MUTEXES` constant |
+| `kernel/main.c` | Calls `shminit()` and `mutexinit()` at boot |
 
 | User file | Purpose |
 |---|---|
@@ -170,4 +171,5 @@ $ mutextest
 | `user/priority.c` | Test for `setpriority`/`getpriority` |
 | `user/waitstat.c` | Test for `wait_stat` |
 | `user/shmtest.c` | Test for `shm_open`/`shm_close` |
+| `user/mutextest.c` | Test for `mutex_init`/`mutex_lock`/`mutex_unlock` |
 
