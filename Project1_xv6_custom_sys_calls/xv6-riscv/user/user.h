@@ -32,6 +32,9 @@ int getpriority(int);
 int wait_stat(int*, int*, int*);
 uint64 shm_open(int, int);
 int shm_close(int);
+int mutex_init(int);
+int mutex_lock(int);
+int mutex_unlock(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

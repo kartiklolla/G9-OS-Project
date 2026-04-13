@@ -188,6 +188,12 @@ void            plicinithart(void);
 int             plic_claim(void);
 void            plic_complete(int);
 
+// mutex.c
+void            mutexinit(void);
+int             mutex_init(int);
+int             mutex_lock(int);
+int             mutex_unlock(int);
+
 // virtio_disk.c
 void            virtio_disk_init(void);
 void            virtio_disk_rw(struct buf *, int);

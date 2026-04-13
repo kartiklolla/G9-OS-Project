@@ -27,3 +27,6 @@
 #define SYS_wait_stat    26
 #define SYS_shm_open     27
 #define SYS_shm_close    28
+#define SYS_mutex_init    29
+#define SYS_mutex_lock    30
+#define SYS_mutex_unlock  31
