@@ -243,7 +243,9 @@ i added a global array `mutextable[16]` of `struct umutex` in kernel/sysproc.c. 
 $ mutextest
 
 ### Execution Screenshot
-mutextest screenshot:
+Execution Screenshot
+
+![mutextest output](Screenshot%202026-04-13%20154603.png)
 === mutex test ===
 mutex_init(0): OK
 mutex_lock(0): OK (acquired)
