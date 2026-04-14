@@ -106,6 +106,10 @@ All three are `static inline` in the header so no separate compilation unit is n
 
 ## custom_cp
 
+**Implemented by:** KIRTI VARDHAN BHUSHAN
+
+**Admission no.:** 24JE0635
+
 **Key design decisions:**
 - Uses `getopt(3)` for flag parsing: `-i` (interactive overwrite prompt) and `-v` (verbose `src -> dest` output).
 - Opens source with `O_RDONLY`, reads `stat` to get the mode, opens destination with `O_CREAT | O_TRUNC | mode` — preserves permission bits.
@@ -119,9 +123,15 @@ All three are `static inline` in the header so no separate compilation unit is n
 - Write errors mid-copy: warns and returns without cleaning up the partial file.
 - Exactly two positional arguments required (`src dest`); more or fewer prints usage and exits.
 
+**Execution Screenshots:**
+![wc output](screenshots/custom_cp.png)
 ---
 
 ## custom_mv
+
+**Implemented by:** KIRTI VARDHAN BHUSHAN
+
+**Admission no.:** 24JE0635
 
 **Key design decisions:**
 - Uses `getopt(3)` for flag parsing: `-i` (interactive overwrite prompt) and `-v` (verbose `src -> dest` output).
@@ -138,6 +148,8 @@ All three are `static inline` in the header so no separate compilation unit is n
 - Same source and destination (including through a directory): detected and rejected.
 - Exactly two positional arguments required (`src dest`).
 
+**Execution Screenshots:**
+![wc output](screenshots/custom_mv.png)
 ---
 
 ## custom_rm
