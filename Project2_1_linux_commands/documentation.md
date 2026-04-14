@@ -131,6 +131,8 @@ All three are `static inline` in the header so no separate compilation unit is n
 **Implemented by:** KOMMARAJU LOKESH 
 
 **Admission no.:** 24JE0637
+
+
 **Key design decisions:**
 
 - Uses getopt(3) for flag parsing: -i (interactive deletion prompt), -v (verbose output), and -r / -R (recursive deletion for directories).
@@ -153,7 +155,7 @@ All three are `static inline` in the header so no separate compilation unit is n
 - Partial failures: continues processing remaining files even if one fails.
   **Execution Screenshots:*
 
-![wc_output](screenshots/Screenshot%202026-04-11%20154027.png)
+![wc output](screenshots/custom_rm.png)
 ---
 ## custom_mv
 
