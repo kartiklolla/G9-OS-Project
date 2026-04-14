@@ -151,8 +151,9 @@ All three are `static inline` in the header so no separate compilation unit is n
 - Symbolic links: deletes the link itself instead of the target.
 - Multiple arguments: supports deleting multiple files in one command.
 - Partial failures: continues processing remaining files even if one fails.
-  **Execution Screenshots:**
-  ![wc output](screenshots/Screenshot 2026-04-11 154027.png)
+  **Execution Screenshots:*
+
+![wc_output](screenshots/Screenshot%202026-04-11%20154027.png)
 ---
 ## custom_mv
 
