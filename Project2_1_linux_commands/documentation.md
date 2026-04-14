@@ -152,7 +152,7 @@ All three are `static inline` in the header so no separate compilation unit is n
 - Multiple arguments: supports deleting multiple files in one command.
 - Partial failures: continues processing remaining files even if one fails.
   **Execution Screenshots:**
-  
+  ![wc output](screenshots/Screenshot 2026-04-11 154027.png)
 ---
 ## custom_mv
 
