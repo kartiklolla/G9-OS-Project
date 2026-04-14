@@ -199,6 +199,8 @@ Syscalls: `unlink`, `rmdir`, `opendir`, `readdir`, `lstat`
 echo "ls | wc -l" | ./bin/custom_shell
 ```
 
+**Auto-PATH:** on startup the shell reads its own executable path via `/proc/self/exe`, extracts the directory, and prepends it to `$PATH`. This means all `custom_*` commands are available by name inside the shell without any `./bin/` prefix.
+
 **Built-in commands:**
 
 | Command | Description |
@@ -225,18 +227,18 @@ echo "ls | wc -l" | ./bin/custom_shell
 /home/user
 /home/user $ cd /tmp
 /tmp $ echo "hello world" > test.txt
-/tmp $ cat test.txt
+/tmp $ custom_cat test.txt
 hello world
-/tmp $ cat test.txt | wc -w
+/tmp $ custom_cat test.txt | custom_wc -w
 2
-/tmp $ ls -l | grep test
+/tmp $ custom_ls -l | custom_grep test
 -rw-r--r-- 1 ... test.txt
 /tmp $ sleep 2 &
 [bg] pid 12345
 /tmp $ exit
 ```
 
-Syscalls: `fork`, `execvp`, `waitpid`, `pipe`, `dup2`, `open`, `chdir`, `getcwd`
+Syscalls: `fork`, `execvp`, `waitpid`, `pipe`, `dup2`, `open`, `chdir`, `getcwd`, `readlink`, `setenv`
 
 ---
 

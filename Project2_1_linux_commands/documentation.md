@@ -141,11 +141,13 @@ All three are `static inline` in the header so no separate compilation unit is n
 
 ### Architecture
 
-The shell is a read-eval-print loop with four layers:
+The shell is a read-eval-print loop with five layers:
 
 ```
-fgets → tokenize → parse_pipeline → run_pipeline
+prepend_bin_dir_to_path → fgets → tokenize → parse_pipeline → run_pipeline
 ```
+
+**PATH bootstrap** (`prepend_bin_dir_to_path`): called once at startup before the REPL begins. Reads the shell's own executable path via `readlink("/proc/self/exe")`, strips the filename to get the directory, and prepends it to `$PATH` with `setenv`. This ensures all `custom_*` siblings in `bin/` are findable by `execvp` without the user needing to configure `$PATH` manually.
 
 **Tokenizer** (`tokenize`): splits the input line on whitespace in-place, producing a `char *[]` of tokens.
 
@@ -189,4 +191,4 @@ The parent skips `waitpid` for background jobs and prints the last child's PID. 
 | custom_cp | `open`, `read`, `write`, `close`, `stat`, `fstat` |
 | custom_mv | `rename`, `open`, `read`, `write`, `close`, `unlink`, `stat` |
 | custom_rm | `unlink`, `rmdir`, `opendir`, `readdir`, `lstat` |
-| custom_shell | `fork`, `execvp`, `waitpid`, `pipe`, `dup2`, `open`, `close`, `chdir`, `getcwd` |
+| custom_shell | `fork`, `execvp`, `waitpid`, `pipe`, `dup2`, `open`, `close`, `chdir`, `getcwd`, `readlink`, `setenv` |

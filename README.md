@@ -47,7 +47,7 @@ Eight POSIX utilities written from scratch in C11. No `system()`, no `popen()` â
 | `custom_cp` | Copy files; handles destination directory |
 | `custom_mv` | Move/rename; `rename(2)` with cross-device fallback |
 | `custom_rm` | Remove files; `-r` recursive directory removal |
-| `custom_shell` | Interactive shell with pipes, redirections (`<` `>` `>>`), background (`&`) |
+| `custom_shell` | Interactive shell with pipes, redirections (`<` `>` `>>`), background (`&`); auto-adds `bin/` to `$PATH` so all `custom_*` commands work by name inside the shell |
 
 **Build & run:**
 ```bash
