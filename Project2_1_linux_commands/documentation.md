@@ -70,6 +70,10 @@ All three are `static inline` in the header so no separate compilation unit is n
 
 ## custom_grep
 
+**Implemented by:** KETHAVATH VARUN KUMAR
+
+**Admission no.:** 24JE0634
+
 **Key design decisions:**
 - Uses `getline(3)` (POSIX.1-2008) for line-by-line reading — handles arbitrarily long lines without a fixed buffer.
 - Case-insensitive mode (`-i`) lowercases both the pattern and each input line into `malloc`'d buffers, then calls `strstr`. This avoids modifying the original line.
@@ -79,6 +83,9 @@ All three are `static inline` in the header so no separate compilation unit is n
 - Multiple files: prefixes each match with `filename:` only when more than one file is given.
 - Files that fail to open: warns and continues to the next file.
 - Last line with no trailing newline: adds one before printing.
+
+**Execution Screenshots:**
+![grep output](screenshots/custom_grep.jpeg)
 
 ---
 
