@@ -126,7 +126,37 @@ All three are `static inline` in the header so no separate compilation unit is n
 **Execution Screenshots:**
 ![wc output](screenshots/custom_cp.png)
 ---
+## custom_rm
 
+**Implemented by:** KOMMARAJU LOKESH 
+
+**Admission no.:** 24JE0637
+
+
+**Key design decisions:**
+
+- Uses getopt(3) for flag parsing: -i (interactive deletion prompt), -v (verbose output), and -r / -R (recursive deletion for directories).
+- Uses lstat(2) instead of stat(2) to correctly handle symbolic links without following them.
+- Uses unlink(2) to remove regular files and symbolic links safely.
+- Uses opendir(3) and readdir(3) to iterate directory contents recursively when -r is specified.
+- Applies depth-first deletion: removes all contents first, then deletes the directory using rmdir(2).
+- Prevents accidental deletion of special entries by skipping "." and ".." during traversal.
+- -i prompts the user before deleting each file or directory.
+- -v prints confirmation like removed 'filename'.
+
+**Edge cases handled:**
+
+- Directory without -r: prints an error and skips deletion.
+- Non-existent file: detects using lstat(2) and reports error.
+- Permission denied: properly handles and reports permission errors.
+- Recursive deletion safety: avoids infinite loops by skipping "." and "..".
+- Symbolic links: deletes the link itself instead of the target.
+- Multiple arguments: supports deleting multiple files in one command.
+- Partial failures: continues processing remaining files even if one fails.
+  **Execution Screenshots:*
+
+![wc output](screenshots/custom_rm.png)
+---
 ## custom_mv
 
 **Implemented by:** KIRTI VARDHAN BHUSHAN
@@ -152,19 +182,7 @@ All three are `static inline` in the header so no separate compilation unit is n
 ![wc output](screenshots/custom_mv.png)
 ---
 
-## custom_rm
 
-**Key design decisions:**
-- Uses `lstat` (not `stat`) to detect symlinks — a symlink to a directory is removed with `unlink`, not `rmdir`.
-- Recursive removal is depth-first: recurse into children first, then `rmdir` the (now empty) directory.
-- Without `-r`: refuses directories with a clear error message rather than silently skipping.
-
-**Edge cases handled:**
-- `.` and `..` are skipped during recursion.
-- Partial failures in recursive removal: continue with remaining entries, return non-zero at the end.
-- `-R` (uppercase) accepted as synonym for `-r`.
-
----
 
 ## custom_shell
 
