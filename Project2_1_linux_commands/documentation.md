@@ -76,7 +76,8 @@ All three are `static inline` in the header so no separate compilation unit is n
 
 ## custom_wc
 
-**Name:** Madhyam Kodinariya
+**Implemented by:** Madhyam Kodinariya  
+
 **Admission no.:** 24JE0636
 
 **Key design decisions:**
