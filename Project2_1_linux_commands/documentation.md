@@ -43,6 +43,7 @@ All three are `static inline` in the header so no separate compilation unit is n
 ---
 
 ## custom_cat
+**Implemented by:** Kandlavathu Mohan Naik(24JE0631)
 
 **Key design decisions:**
 - Uses `fgetc` to read one character at a time, which allows line-aware flag processing without buffering full lines.
@@ -58,6 +59,13 @@ All three are `static inline` in the header so no separate compilation unit is n
 - `-b` and `-n` together: `-b` wins, non-empty lines are numbered, blank lines get no number prefix.
 - Last line with no trailing newline: rendered correctly since the `\n` branch is only triggered on actual newlines.
 
+### Screenshots
+
+![basic cat](screenshots/cat_basic.png)
+![cat -h](screenshots/cat_help.png)
+![cat -n](screenshots/cat_n.png)
+![cat -E](screenshots/cat_E.png)
+![cat -b](screenshots/cat_b.png)
 ---
 
 ## custom_grep
