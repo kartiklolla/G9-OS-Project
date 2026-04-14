@@ -76,6 +76,9 @@ All three are `static inline` in the header so no separate compilation unit is n
 
 ## custom_wc
 
+**Name:** Madhyam Kodinariya
+**Admission no.:** 24JE0636
+
 **Key design decisions:**
 - Reads in 64 KiB chunks via `read(2)` and counts in a single pass over the buffer.
 - Word counting: tracks an `in_word` boolean that flips on `isspace` transitions — same algorithm as POSIX `wc`.
@@ -84,6 +87,11 @@ All three are `static inline` in the header so no separate compilation unit is n
 **Edge cases handled:**
 - Multiple files: prints a `total` row.
 - Stdin: handled when no file arguments are given.
+
+**Execution Screenshots:**
+![wc output](screenshots/wc1.png)
+![wc with one file](screenshots/wc2.png)
+![wc with multiple files](screenshots/wc3.png)
 
 ---
 
