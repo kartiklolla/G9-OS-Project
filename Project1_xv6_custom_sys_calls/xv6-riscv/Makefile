@@ -152,6 +152,12 @@ UPROGS=\
 	$U/_waitstat\
 	$U/_shmtest\
   $U/_mutextest\
+	$U/_ps\
+	$U/_readcountdemo\
+	$U/_scheddemo\
+	$U/_timebench\
+	$U/_shmdemo\
+	$U/_mutexdemo\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

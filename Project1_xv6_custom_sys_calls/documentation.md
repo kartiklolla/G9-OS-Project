@@ -258,3 +258,64 @@ Execution Screenshot
 
 ---
 
+## Real application demos built on these syscalls
+
+The test files prove correctness, but these extra user programs show the syscalls being used like normal OS tools.
+
+### 1. `readcountdemo`
+Counts how many `read()` syscalls happen while reading a real file or stdin.
+
+Example:
+```bash
+readcountdemo README
+```
+
+### 2. `ps`
+Lists live xv6 processes by scanning PIDs and calling `getprocinfo()`.
+
+Example:
+```bash
+ps
+```
+
+### 3. `scheddemo`
+Starts two CPU-bound children with different priorities to show priority scheduling.
+
+Example:
+```bash
+scheddemo
+```
+
+Best run:
+```bash
+make CPUS=1 qemu
+```
+
+### 4. `timebench`
+Runs a command and prints its runnable and running ticks using `wait_stat()`.
+
+Example:
+```bash
+timebench wc README
+```
+
+### 5. `shmdemo`
+Shows parent and child sharing a memory region and updating the same data.
+
+Example:
+```bash
+shmdemo
+```
+
+### 6. `mutexdemo`
+Uses shared memory plus `mutex_lock()` / `mutex_unlock()` to protect a shared counter.
+
+Example:
+```bash
+mutexdemo
+```
+
+The new programs are added in [xv6-riscv/Makefile](xv6-riscv/Makefile) under `UPROGS`, so they are built into `fs.img` automatically.
+
+---
+
